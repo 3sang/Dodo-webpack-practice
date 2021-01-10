@@ -7,9 +7,6 @@
 /yarn.lock
 /package-lock.json
 
-# production
-/dist
-
 # misc
 .DS_Store
 
@@ -17,10 +14,16 @@
 .umi
 .umi-production
 
-src
-mock
+/src
+/mock
 .env
 .eslintrc.js
 .umirc
 .prettierrc
 .prettierignore
+.babelrc
+.editorconfig
+.umirc.js
+rollup.config.js
+.gitignore
+.npmignore
