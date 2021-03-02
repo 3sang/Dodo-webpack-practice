@@ -1,0 +1,40 @@
+@import '../css/lessUitls.less';
+
+.myTable {
+  :global {
+    .ant-table-scroll {
+      .contentTableNomal();
+      overflow: auto;
+
+      td {
+        word-break: break-all;
+      }
+    }
+
+    .react-resizable {
+      position: relative;
+      background-clip: padding-box;
+    }
+
+    .react-resizable-handle,.react-resizable-handle-se{
+      position: absolute;
+      width: 10px;
+      height: 100%;
+      bottom: 0;
+      right: -5px;
+      cursor: col-resize;
+      z-index: 1;
+    }
+  }
+
+  /** 这里是偏移的时候显示的竖线，只有表头有竖线;
+如果需要联通表格请自行修改高度，1000倍表头高度，然后超出表格隐藏什么的（自行研究） */
+  // .react-resizable-handle.active::before {
+  //   content: '';
+  //   position: absolute;
+  //   left: 50%;
+  //   top: 0;
+  //   bottom: 0;
+  //   border-left: solid 1px #e8e8e8;
+  // }
+}
