@@ -1,0 +1,361 @@
+// @primaryBlue: #4B8EF5;
+@primaryBlue: #2C4EF9;
+// @BtnBlue: #4B8FF3;
+@BtnBlue: #1E74FE;
+@BtnHoverBlue: #2c4ef9e3;
+@primaryDeepBlue: #0648C0;
+@primaryShallowBlue: #5579EF;
+@antdBlue: #3b9ef0;
+@bgColor: #F7F7F7;
+@boxBgColor: #F6F8FB;
+@LightText: #FBFBFB;
+@primaryDarkText: #333333;
+@grayText: #666;
+@ShallowGrayText: #888;
+@PrimaryBorderColor: #E4E4E4;
+@PrimaryBorder: 1px solid #F5F7FC;
+@PrimaryGrayBorder: 1px solid #E4E4E4;
+@PrimaryDarkBorder: 1px solid @ShallowGrayText;
+@primaryBoxShawdow: 0px 0px 1px rgba(85, 121, 239, 0.2);
+@transCurve: cubic-bezier(0.645, 0.045, 0.355, 1);
+@btnRed:#FF4925;
+
+// antd中蓝色椭圆按钮(默认）
+.btnRadiusBlue(@radius: 27px, @bgColor: @BtnBlue, @hoverColor: @BtnHoverBlue , @marginRirht: 15px) {
+  height: 32px;
+  border-radius: @radius;
+  padding: 0 16px;
+  background: @BtnBlue;
+  margin-right: @marginRirht;
+  transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+  color: white;
+
+  &:focus {
+    color: #fff;
+    background: @hoverColor;
+  }
+
+  &:hover {
+    color: #fff;
+    background: @hoverColor;
+  }
+}
+
+// antd中白色椭圆按钮
+.btnRadiusWhite(@radius: 27px, @bgColor: @BtnBlue, @marginRirht: 15px) {
+  height: 32px;
+  border-radius: @radius;
+  padding: 0 16px;
+  margin-right: @marginRirht;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+}
+
+// antd中白色椭圆按钮,但是会变背景色，上一个是不变背景色的
+.btnRadiusWhite2Color(@radius: 27px, @bgColor: @BtnBlue, @activeColor: @BtnBlue, @marginRirht: 15px) {
+  height: 32px;
+  border-radius: @radius;
+  padding: 0 16px;
+  margin-right: @marginRirht;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  &:focus {
+    color: #fff;
+    background: @activeColor;
+  }
+}
+
+// 新UI-按钮背景是白色
+.btnWhite() {
+  border: 1px solid @primaryBlue;
+  color: @primaryBlue;
+  &:hover {
+    border: 1px solid @BtnHoverBlue;
+  }
+
+  &:focus {
+    border: 1px solid @primaryBlue;
+    box-shadow: 0 0 3px @primaryBlue;
+  }
+}
+
+.btnPrimary() {
+  background: @primaryBlue;
+  color: white;
+  border: none;
+
+  &:active,&:focus{
+    background: @BtnHoverBlue;
+  }
+
+  &:hover {
+    background: @BtnHoverBlue;
+  }
+}
+
+.btnBlack() {
+  border: 1px solid #DCDFE2;
+  color: #666;
+
+  &[ant-click-animating-without-extra-node='true']{
+    box-shadow: 0 0 3px #999;
+  }
+
+  &:hover {
+    border: 1px solid @PrimaryBorderColor;
+    color: #555;
+  }
+
+  &:focus {
+    border: 1px solid @PrimaryBorderColor;
+    box-shadow: 0 0 3px #999;
+    color: #555;
+  }
+}
+
+// 按钮红色
+.btnRed() {
+  border: 1px solid @btnRed;
+  color: @btnRed;
+  background: white;
+
+  &:focus,&:active {
+    border: 1px solid @btnRed;
+    box-shadow: 0 0 3px @btnRed;
+    background: white;
+    color: @btnRed;
+  }
+
+  &:hover{
+    background: white;
+    color: @btnRed;
+  }
+}
+
+.arrow() {
+  width: 13px;
+  height: 10px;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.35);
+  transform: translateY(-50%);
+  margin: 0 15px 0 10px;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    right: 0;
+    content: '';
+    border-right: 2px solid rgba(128, 128, 128, 0.35);
+    border-top: 2px solid rgba(128, 128, 128, 0.35);
+    -ms-transform: rotate(45deg) translate(calc(50% - 2.5px), 2px);
+    transform: rotate(45deg) translate(calc(50% - 2px), 5px);
+  }
+}
+
+.font(@fontsize: 1em, @fontweight: 500, @lineheight: 1.4em, @color: white) {
+  font-size: @fontsize;
+  font-weight: @fontweight;
+  color: @color;
+  font-family: Microsoft YaHei, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: @lineheight;
+  letter-spacing: .13em;
+}
+
+// 放在.ant-table-body里,th颜色是灰的，底下那个th是蓝色的
+.contentTable() {
+
+  td,
+  tr {
+    background: white;
+    padding: 6px 10px !important;
+    text-align: left !important;
+
+    a {
+      padding: 0 !important;
+    }
+  }
+
+  .ant-table-thead {
+    th {
+      background: @boxBgColor;
+      padding: 6px 10px !important;
+      text-align: left !important;
+      .font(14px, 500, 2em, #333333)
+    }
+  }
+
+}
+
+.contentTableNomal() {
+
+  td,
+  tr {
+    padding: 6px 10px !important;
+    text-align: left !important;
+    color: @ShallowGrayText;
+
+    a {
+      padding: 0 !important;
+    }
+  }
+
+  .ant-table-thead {
+    th {
+      background: @boxBgColor;
+      padding: 3px 10px !important;
+      text-align: left !important;
+      .font(14px, 500, 2em, rgba(88, 128, 169, 1))
+    }
+  }
+
+  tr {
+    background: white;
+
+    &:hover {
+      background: @boxBgColor;
+    }
+
+    &:nth-child(odd) {
+      background: white;
+    }
+  }
+
+}
+// 滚动提醒
+// animation: wordsLoop 15s linear infinite normal;
+@keyframes wordsLoop {
+  0% {
+    transform: translateY(300px);
+  }
+
+  // 50%{
+  //   transform: translateY(-50%);
+  // }
+
+  100% {
+    transform: translateY(-30em);
+  }
+}
+
+// 放在.ant-descriptions-view里
+.descriptionsTable() {
+  :global {
+
+    td,
+    tr,
+    th {
+      padding: 13px 10px !important;
+    }
+
+    .ant-descriptions-item-label {
+      width: 120px;
+      text-align: center;
+    }
+
+  }
+}
+
+// tabBar的样式,放在.ant-tabs-nav-container里
+.tabBarCss() {
+
+  .ant-tabs-tab {
+    text-align: center;
+    color: #888888;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    padding: 15px 8px 5px;
+    font-family: Microsoft YaHei;
+
+    &:hover {
+      color: #222222;
+    }
+  }
+
+  .ant-tabs-tab-active {
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #222222;
+    transition: all .3s;
+  }
+
+  .ant-tabs-ink-bar {
+    height: 10px;
+    position: relative;
+    background: transparent;
+
+    &::after {
+      position: absolute;
+      content: '';
+      right: 0;
+      left: 0;
+      margin: 0 25%;
+      height: 5px;
+      border-radius: 2px;
+      background: #1e74fe;
+      box-shadow: 0px 2px 6px 0px rgba(30, 116, 254, 0.2);
+    }
+  }
+}
+
+// 描述列表
+.detailItem() {
+  font-size: 14px;
+  font-family:PingFang-SC-Regular;
+  font-weight: 400;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.label() {
+  text-align: end;
+  font-weight: 400;
+  color: #777;
+  height: 100%;
+  font-size: 14px;
+  font-family:PingFang-SC-Regular;
+  letter-spacing: 0.5px;
+}
+
+// 常用pop菜单的样式，overClassName里，子菜单使用.memu包裹，内用div
+.popMenuClass(@color: #A1A1A1, @hoverColor: white, @bgColor: white, @hoverbgColor: @lightPrimaryColor,@width:100px) {
+  // margin-top: -5px;
+  padding: 5px 0 0;
+  width: @width;
+
+  .menu {
+    width: 100%;
+
+    >div {
+      width: 100%;
+      text-align: center;
+      cursor: pointer;
+      font-family: PingFang SC;
+      color: @color;
+      padding: 8px;
+      transition: all 0.1s;
+
+      &:hover {
+        background: @hoverbgColor;
+        color: @hoverColor;
+      }
+    }
+  }
+
+  :global {
+    .ant-popover-content > .ant-popover-arrow {
+      // display: none;
+      margin-top: -5px;
+      background-color: @bgColor;
+      border-color:@bgColor;
+    }
+
+    .ant-popover-inner-content {
+      padding: 10px 0 !important;
+      background-color: @bgColor;
+    }
+  }
+}
