@@ -8,7 +8,7 @@ module.exports = {
   // mode选项定义的NODE_ENV 作用于webpack入口文件下的业务代码，通常为src文件夹下的代码，
   // 而 npm脚本里的设置多用于配置相关,cross-env设置NODE_ENV=production（命令行里）,使用process.env.NODE_ENV获取，例如在webpack.config.js里区分环境配置不同插件
   entry: {
-    example: './src/pages/index.js',
+    resizableTable: './src/pages/index.js',
     // 'ResizableTable.min': './src/index.js',
     // vendors: ['react-resizable'],
   },
@@ -36,11 +36,13 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist/lib'),
+    // 开发服务器
+    contentBase: path.join(__dirname, 'dist/lib'), // 发布目录
     host: 'localhost',
-    compress: true,
+    // compress: true,
     port: 6030,
     hot: true,
+    open: true, // 是否默认打开浏览器
   },
   module: {
     rules: [
@@ -74,7 +76,6 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          'html-minify-loader',
           {
             loader: 'css-loader',
             options: {
@@ -105,6 +106,39 @@ module.exports = {
       },
       {
         test: /\.less$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              getLocalIdent: (context, localIdentName, localName, options) => {
+                // 依赖包里和global.less里的不动
+                console.log(context);
+                if (
+                  context.resourcePath.includes('node_modules') ||
+                  context.resourcePath.includes('ant.design.pro.less') ||
+                  context.resourcePath.includes('global.less')
+                ) {
+                  return localName;
+                }
+                const match = context.resourcePath.match(/src(.*)/);
+                if (match && match[1]) {
+                  const antdProPath = match[1].replace('.less', '');
+                  const arr = slash(antdProPath)
+                    .split('/')
+                    .map(a => a.replace(/([A-Z])/g, '-$1'))
+                    .map(a => a.toLowerCase());
+                  return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
+                }
+                return localName;
+              },
+            },
+          },
+          'less-loader',
+        ],
+      },
+      {
+        test: /\.less$/,
         use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
@@ -115,6 +149,18 @@ module.exports = {
             loader: 'html-minify-loader',
             options: {
               comments: false,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              // [hash]
             },
           },
         ],
