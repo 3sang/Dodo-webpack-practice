@@ -76,70 +76,68 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              getLocalIdent: (context, localIdentName, localName, options) => {
-                // 依赖包里和global.less里的不动
-                console.log(context);
-                if (
-                  context.resourcePath.includes('node_modules') ||
-                  context.resourcePath.includes('ant.design.pro.less') ||
-                  context.resourcePath.includes('global.less')
-                ) {
-                  return localName;
-                }
-                const match = context.resourcePath.match(/src(.*)/);
-                if (match && match[1]) {
-                  const antdProPath = match[1].replace('.less', '');
-                  const arr = slash(antdProPath)
-                    .split('/')
-                    .map(a => a.replace(/([A-Z])/g, '-$1'))
-                    .map(a => a.toLowerCase());
-                  return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
-                }
-                return localName;
-              },
-            },
-          },
+          'css-loader',
+          // {
+          //   loader: 'css-loader',
+          //   options: {
+          //     getLocalIdent: (context, localIdentName, localName, options) => {
+          //       // 依赖包里和global.less里的不动
+          //       console.log(context);
+          //       if (
+          //         context.resourcePath.includes('node_modules') ||
+          //         context.resourcePath.includes('ant.design.pro.less') ||
+          //         context.resourcePath.includes('global.less')
+          //       ) {
+          //         return localName;
+          //       }
+          //       const match = context.resourcePath.match(/src(.*)/);
+          //       if (match && match[1]) {
+          //         const antdProPath = match[1].replace('.less', '');
+          //         const arr = slash(antdProPath)
+          //           .split('/')
+          //           .map(a => a.replace(/([A-Z])/g, '-$1'))
+          //           .map(a => a.toLowerCase());
+          //         return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
+          //       }
+          //       return localName;
+          //     },
+          //   },
+          // },
         ],
       },
       {
         test: /\.less$/,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              getLocalIdent: (context, localIdentName, localName, options) => {
-                // 依赖包里和global.less里的不动
-                console.log(context);
-                if (
-                  context.resourcePath.includes('node_modules') ||
-                  context.resourcePath.includes('ant.design.pro.less') ||
-                  context.resourcePath.includes('global.less')
-                ) {
-                  return localName;
-                }
-                const match = context.resourcePath.match(/src(.*)/);
-                if (match && match[1]) {
-                  const antdProPath = match[1].replace('.less', '');
-                  const arr = slash(antdProPath)
-                    .split('/')
-                    .map(a => a.replace(/([A-Z])/g, '-$1'))
-                    .map(a => a.toLowerCase());
-                  return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
-                }
-                return localName;
-              },
-            },
-          },
+          'css-loader',
+          // {
+          //   loader: 'css-loader',
+          //   options: {
+          //     getLocalIdent: (context, localIdentName, localName, options) => {
+          //       // 依赖包里和global.less里的不动
+          //       console.log(context);
+          //       if (
+          //         context.resourcePath.includes('node_modules') ||
+          //         context.resourcePath.includes('ant.design.pro.less') ||
+          //         context.resourcePath.includes('global.less')
+          //       ) {
+          //         return localName;
+          //       }
+          //       const match = context.resourcePath.match(/src(.*)/);
+          //       if (match && match[1]) {
+          //         const antdProPath = match[1].replace('.less', '');
+          //         const arr = slash(antdProPath)
+          //           .split('/')
+          //           .map(a => a.replace(/([A-Z])/g, '-$1'))
+          //           .map(a => a.toLowerCase());
+          //         return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
+          //       }
+          //       return localName;
+          //     },
+          //   },
+          // },
           'less-loader',
         ],
-      },
-      {
-        test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
         test: /\.html$/,
