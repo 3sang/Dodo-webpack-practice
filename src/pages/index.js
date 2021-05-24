@@ -1,10 +1,8 @@
 import React from 'react';
 import ResizableTable from './resizableTable';
-import { connect } from 'dva';
-import {Button} from 'antd'
+import {Button} from 'antd';
 
 function Index(props) {
-  const { collapsed } = props;
   const columns = [
     {
       width: 150,
@@ -72,7 +70,7 @@ function Index(props) {
   ];
 
   const tableprops = {
-    collapsed,
+    collapsed:false,
     bordered: true,
     rowKey: 'id',
     columns: columns,
@@ -93,6 +91,4 @@ function Index(props) {
   </>;
 }
 
-export default connect(state => ({
-  collapsed: state.menu ? menu.collapsed : false,
-}))(props => <Index {...props} />);
+export default Index;
