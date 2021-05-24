@@ -1,8 +1,9 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin'); // 引入压缩插件
 var HotModuleReplacementPlugin = require('webpack').HotModuleReplacementPlugin;
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const cssChangeLoader = require('css-change-loader')
+// webpack-theme-color-replacer
 module.exports = {
   mode: 'none',
   // 因为默认是production 默认会进行压缩
@@ -79,32 +80,6 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          // {
-          //   loader: 'css-loader',
-          //   options: {
-          //     getLocalIdent: (context, localIdentName, localName, options) => {
-          //       // 依赖包里和global.less里的不动
-          //       console.log(context);
-          //       if (
-          //         context.resourcePath.includes('node_modules') ||
-          //         context.resourcePath.includes('ant.design.pro.less') ||
-          //         context.resourcePath.includes('global.less')
-          //       ) {
-          //         return localName;
-          //       }
-          //       // const match = context.resourcePath.match(/src(.*)/);
-          //       // if (match && match[1]) {
-          //       //   const antdProPath = match[1].replace('.less', '');
-          //       //   const arr = slash(antdProPath)
-          //       //     .split('/')
-          //       //     .map(a => a.replace(/([A-Z])/g, '-$1'))
-          //       //     .map(a => a.toLowerCase());
-          //       //   return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
-          //       // }
-          //       return localName;
-          //     },
-          //   },
-          // },
         ],
       },
       {
@@ -112,32 +87,7 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          // {
-          //   loader: 'css-loader',
-          //   options: {
-          //     getLocalIdent: (context, localIdentName, localName, options) => {
-          //       // 依赖包里和global.less里的不动
-          //       console.log(context);
-          //       if (
-          //         context.resourcePath.includes('node_modules') ||
-          //         context.resourcePath.includes('ant.design.pro.less') ||
-          //         context.resourcePath.includes('global.less')
-          //       ) {
-          //         return localName;
-          //       }
-          //       const match = context.resourcePath.match(/src(.*)/);
-          //       if (match && match[1]) {
-          //         const antdProPath = match[1].replace('.less', '');
-          //         const arr = slash(antdProPath)
-          //           .split('/')
-          //           .map(a => a.replace(/([A-Z])/g, '-$1'))
-          //           .map(a => a.toLowerCase());
-          //         return `dodo-${arr.join('-')}-${localName}`.replace(/--/g, '-');
-          //       }
-          //       return localName;
-          //     },
-          //   },
-          // },
+          'css-change-loader',
           'less-loader',
         ],
       },
@@ -170,9 +120,9 @@ module.exports = {
   plugins: [
     new HotModuleReplacementPlugin(),
     // 以该文件下的本地index.html作为模板,打包的时候自动生成服务器html并自动引入打包的js文件
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'dist/index.html'),
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: path.join(__dirname, 'dist/index.html'),
+    // }),
   ],
   devtool: 'source-map',
   // 使自己项目中依赖于宿主项目里的库，不重复打包,比如react，因为引入的肯定是react项目，所以不需要再将react打包进npm包
