@@ -1,6 +1,7 @@
 import React from 'react';
 import ResizableTable from './resizableTable';
 import {Button} from 'antd';
+// const LazyPage = ()=>import ('./lazyload-page');
 
 function Index(props) {
   const columns = [
@@ -87,6 +88,7 @@ function Index(props) {
   };
   return <>
   <Button type='primary'>测试组件颜色是否变化</Button>
+  {/* <LazyPage /> */}
   <ResizableTable {...tableprops}/>
   </>;
 }

@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import { Resizable } from 'react-resizable';
-import _ from 'lodash';
+import { omit, isEmpty, has } from 'lodash';
 import styles from './index.less';
 
 const ResizeableTitle = props => {
@@ -52,7 +52,7 @@ class ResizableTable extends Component {
     window.addEventListener('resize', this.windowResize);
     this.setState({
       tableWidth: this.tableRef.clientWidth,
-      tableProps: _.omit(this.props, [
+      tableProps: omit(this.props, [
         'dataSource',
         'columns',
         'rowSelection',
@@ -74,7 +74,7 @@ class ResizableTable extends Component {
       };
     }
 
-    if (_.isEmpty(newProps.dataSource)) {
+    if (isEmpty(newProps.dataSource)) {
       return {
         dataSource: newProps.dataSource,
       };
@@ -87,8 +87,8 @@ class ResizableTable extends Component {
     if (
       (this.state.columns &&
         this.props.columns.length !== 1 &&
-        !_.has(this.state.columns[0], 'onHeaderCell')) ||
-      (!_.isEmpty(this.props.columns) &&
+        !has(this.state.columns[0], 'onHeaderCell')) ||
+      (!isEmpty(this.props.columns) &&
         JSON.stringify(prevProps.columns) !== JSON.stringify(this.props.columns))
     ) {
       const columns = this.props.columns.map((col, index) =>
@@ -107,14 +107,14 @@ class ResizableTable extends Component {
     }
 
     if (
-      !_.isEmpty(this.props.dataSource) &&
+      !isEmpty(this.props.dataSource) &&
       JSON.stringify(this.state.dataSource) !== JSON.stringify(this.props.dataSource)
     ) {
       this.setState({ dataSource: this.props.dataSource });
     }
 
     if (
-      !_.isEmpty(this.props.dataSource) &&
+      !isEmpty(this.props.dataSource) &&
       JSON.stringify(this.props.rowSelection) !== JSON.stringify(prevProps.rowSelection)
     ) {
       this.setState({ dataSource: this.props.dataSource });
@@ -138,7 +138,7 @@ class ResizableTable extends Component {
           ? this.tableRef.clientWidth + 150
           : this.tableRef.clientWidth - 150,
       });
-    } else if (!_.isEmpty(this.tableRef)) {
+    } else if (!isEmpty(this.tableRef)) {
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.tableRef && this.setState({ tableWidth: this.tableRef.clientWidth });

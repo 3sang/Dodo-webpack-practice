@@ -2,6 +2,12 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin'); // 引入压缩插件
 var HotModuleReplacementPlugin = require('webpack').HotModuleReplacementPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// 可以优化打包体积，在打包结束的时候，会启动启动一个服务在浏览器查看打包的大小和包含的内容等
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -29,11 +35,62 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      new TerserPlugin({
-        // 使用压缩插件
-        include: /\.min\.js$/,
+      // 自定义js优化配置，将会覆盖默认配置
+      new UglifyJsPlugin({
+        parallel: true, //使用多进程并行运行来提高构建速度
+        sourceMap: false,
+        uglifyOptions: {
+          warnings: false,
+          compress: {
+            unused: true,
+            drop_debugger: true,
+            drop_console: true,
+          },
+          output: {
+            comments: false, // 去掉注释
+          },
+        },
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorOptions: {
+          discardComments: { removeAll: true }, // 移除注释
+        },
       }),
     ],
+    splitChunks: {
+      chunks: 'all',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30, // 最大的初始化加载请求次数,为了对请求数做限制，不至于拆分出来过多模块
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+          name: 'defaultVendors',
+        },
+        antdui: {
+          priority: 2,
+          name: 'antdui',
+          test: /[\\/]node_modules[\\/](antd)[\\/]/, //(module) => (/antd/.test(module.context)),
+        },
+        // 拆分基础插件
+        basic: {
+          priority: 3,
+          name: 'basic',
+          test: /[\\/]node_modules[\\/](moment|react|react-dom|react-router|react-router-dom|mobx|mobx-react|axios)[\\/]/,
+        },
+        // 默认的配置，vendors规则不命中的话，就会命中这里
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
   devServer: {
     // 开发服务器
@@ -70,6 +127,7 @@ module.exports = {
             plugins: [
               '@babel/plugin-proposal-class-properties',
               '@babel/plugin-proposal-object-rest-spread',
+              'lodash',
               ['import', { libraryName: 'antd', libraryDirectory: 'lib', style: 'css' }],
             ],
           },
@@ -77,17 +135,36 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: false,
+              publicPath: '../',
+            },
+          },
+          // 'style-loader',
+          'css-loader',
+        ],
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: false,
+              publicPath: '../',
+            },
+          },
+          // 'style-loader',
+          'css-loader',
+          'less-loader',
+        ],
       },
       {
         test: /\.html$/,
-        use: [
-          'html-loader',
-        ],
+        use: ['html-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -112,7 +189,7 @@ module.exports = {
     // 以该文件下的本地index.html作为模板,打包的时候自动生成服务器html并自动引入打包的js文件
     new HtmlWebpackPlugin({
       template: path.join(__dirname, './src/index.html'),
-      filename:path.join(__dirname, './dist/index.html'),
+      filename: path.join(__dirname, './dist/index.html'),
       inject: true, // true：默认值，script标签位于html文件的 body 底部
       hash: true, // 在打包的资源插入html会加上hash
       //  html 文件进行压缩
@@ -122,23 +199,9 @@ module.exports = {
         removeAttributeQuotes: true, //去除属性 标签的 引号  例如 <p id="test" /> 输出 <p id=test/>
       },
     }),
+    new CleanWebpackPlugin(),
+    // new BundleAnalyzerPlugin(),
+    new MiniCssExtractPlugin(),
   ],
   devtool: 'source-map',
-  // 使自己项目中依赖于宿主项目里的库，不重复打包,比如react，因为引入的肯定是react项目，所以不需要再将react打包进npm包
-  // externals: {
-  //   react: {
-  //     commonjs: 'react',
-  //     commonjs2: 'react',
-  //     amd: 'react',
-  //     root: 'React',
-  //   },
-  //   'react-dom': {
-  //     commonjs: 'react-dom',
-  //     commonjs2: 'react-dom',
-  //     amd: 'react-dom',
-  //     root: 'ReactDOM',
-  //   },
-  //   lodash: 'lodash',
-  //   antd:'antd'
-  // },
 };
