@@ -1,8 +1,4 @@
-/**
- * Description: 公用组件，可伸缩列的列表
- * author: dongxy
- * date: 2020/10/01
- * */
+
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import { Resizable } from 'react-resizable';

@@ -1,4 +1,4 @@
-import Index from './pages';
+import Index from './pages/TestThemeColor';
 import React from 'react';
 import ReactDom from 'react-dom';
 

@@ -8,6 +8,8 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// 自写plugin
+const ChangeThemeColorPlugin = require('./src/plugins/change-theme-color-plugin');
 
 module.exports = {
   mode: 'development',
@@ -16,11 +18,12 @@ module.exports = {
   // 而 npm脚本里的设置多用于配置相关,cross-env设置NODE_ENV=production（命令行里）,使用process.env.NODE_ENV获取，例如在webpack.config.js里区分环境配置不同插件
   entry: {
     main: './src/index.js',
+    // main: './src/pages/TestThemeColor.js',
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name]-[hash:5].js',
-    // publicPath: '/',
+    filename: '[name]-[fullhash:5].js',
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx'], // 解析扩展。（当我们通过路导入文件，找不到改文件时，会尝试加入这些后缀继续寻找文件）
@@ -44,7 +47,7 @@ module.exports = {
           compress: {
             unused: true,
             drop_debugger: true,
-            drop_console: true,
+            // drop_console: true,
           },
           output: {
             comments: false, // 去掉注释
@@ -140,11 +143,36 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               esModule: false,
+              // modules: {
+              //   namedExport: true,
+              // },
               publicPath: '../',
             },
           },
           // 'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                getLocalIdent: (context, localIdentName, localName, options) => {
+                  if (
+                    context.resourcePath.includes('node_modules') ||
+                    context.resourcePath.includes('ant.design.pro.less')
+                  ) {
+                    return localName;
+                  }
+  
+                  const match = context.resourcePath.match(/src(.*)/);
+                  if (match && match[1]) {
+                    const pathname = match[1].replace('.less', '');
+                    const name = pathname.split('\\').join('-');
+                    return `ddo-${name}-${localName}`;
+                  }
+                  return localName;
+                },
+              },
+            },
+          },
         ],
       },
       {
@@ -154,11 +182,37 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               esModule: false,
+              // modules: {
+              //   namedExport: true,
+              // },
               publicPath: '../',
             },
           },
           // 'style-loader',
-          'css-loader',
+          // 'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                getLocalIdent: (context, localIdentName, localName, options) => {
+                  if (
+                    context.resourcePath.includes('node_modules') ||
+                    context.resourcePath.includes('ant.design.pro.less')
+                  ) {
+                    return localName;
+                  }
+  
+                  const match = context.resourcePath.match(/src(.*)/);
+                  if (match && match[1]) {
+                    const pathname = match[1].replace('.less', '');
+                    const name = pathname.split('\\').join('-');
+                    return `ddo-${name}-${localName}`;
+                  }
+                  return localName;
+                },
+              },
+            },
+          },
           'less-loader',
         ],
       },
@@ -171,7 +225,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000, // url-loader 包含file-loader，这里不用file-loader, 小于10000B的图片base64的方式引入，大于10000B的图片以路径的方式导入
-          name: 'static/img/[name].[hash:5].[ext]',
+          name: 'static/img/[name].[fullhash:5].[ext]',
         },
       },
       {
@@ -179,7 +233,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000, // 小于10000B的图片base64的方式引入，大于10000B的图片以路径的方式导入
-          name: 'static/fonts/[name].[hash:5].[ext]',
+          name: 'static/fonts/[name].[fullhash:5].[ext]',
         },
       },
     ],
@@ -201,7 +255,12 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     // new BundleAnalyzerPlugin(),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      // filename: '[name]-[fullhash:5].css',
+    }),
+    new ChangeThemeColorPlugin({
+      primaryColor: '#096dd9',
+    }),
   ],
   devtool: 'source-map',
 };
